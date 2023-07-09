@@ -36,6 +36,11 @@ class ImageController extends Controller
         foreach ($images["images"] as $image) {
             $path = Storage::put('public/images', $image);
         }
+        
+        // TODO: Write this data to a database table
+        // TODO: Hook the Discord bot into the database table
+        // TODO: Symlink the images folder in the Discord bot folder to public/images here
+        // TODO: Profit prolly
     }
 
     /**
