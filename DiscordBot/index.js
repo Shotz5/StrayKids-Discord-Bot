@@ -104,6 +104,7 @@ async function sendPeriodicImage() {
         files: [path.join(imagePath, imageToUpload.dataValues.image_name)]
     });
 
+    // Update image to say it's been sent or "uploaded"
     await images.update({ uploaded: 1 }, {
         where: {
             id: imageToUpload.dataValues.id,
