@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Image;
 
 class ImageController extends Controller
 {
@@ -12,7 +13,7 @@ class ImageController extends Controller
      */
     public function index()
     {
-        // ToDo
+        return inertia('Index/Index', ['images' => Image::all()]);
     }
 
     /**
@@ -20,7 +21,7 @@ class ImageController extends Controller
      */
     public function create()
     {
-        return inertia('Index/Index');
+        return inertia('Index/Upload');
     }
 
     /**
@@ -30,14 +31,20 @@ class ImageController extends Controller
     {
         $images = $request->validate([
             "images" => 'required|array',
-            "images.*" => '',
+            "images.*" => 'image',
         ]);
 
         foreach ($images["images"] as $image) {
             $path = Storage::put('public/images', $image);
+
+            Image::create([
+                'name' => basename($path),
+                'posted' => 0,
+            ]);
         }
-        
-        // TODO: Write this data to a database table
+
+        return redirect()->route('image.create')
+            ->with('success', 'Images were uploaded');
         // TODO: Hook the Discord bot into the database table
         // TODO: Symlink the images folder in the Discord bot folder to public/images here
         // TODO: Profit prolly
